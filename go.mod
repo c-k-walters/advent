@@ -1,3 +1,3 @@
-module github.com/c-k-walters/advent
+module advent
 
 go 1.23.3

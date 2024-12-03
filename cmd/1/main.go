@@ -3,8 +3,8 @@ package main
 import (
 	"fmt"
 	"math"
-
-	"github.com/c-k-walters/advent/util"
+    "advent/util"
+    "sort"
 )
 
 func main() {
@@ -15,7 +15,10 @@ func main() {
 
 func star1() {
     fmt.Println("Star 1:")
-    a, b := util.FileToList("input-star1.txt")
+    a, b := util.FileToList("cmd/1/input-star1.txt")
+
+    sort.Ints(a)
+    sort.Ints(b)
 
     sum := 0
     for i := 0; i < len(a); i++ {
@@ -26,5 +29,18 @@ func star1() {
 }
 
 func star2() {
+    fmt.Println("Star 2:")
+    a, b := util.FileToList("cmd/1/input-star1.txt")
 
+    freqmap := util.ToFrequencyMap(b)
+    similarityScore := 0
+
+    for i := 0; i < len(a); i++ {
+        elem, ok := freqmap[a[i]]
+        if ok {
+            similarityScore += elem * a[i]
+        }
+    }
+
+    fmt.Println(similarityScore)
 }
