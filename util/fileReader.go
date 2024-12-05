@@ -8,6 +8,19 @@ import (
     "strings"
 )
 
+func FileReader(fileName string, cb func(*bufio.Reader)) {
+    file, err := os.Open(fileName)
+    if err != nil {
+        log.Fatal(err)
+    }
+    defer file.Close()
+
+    reader := bufio.NewReader(file)
+
+    // perform callback
+    cb(reader)
+}
+
 func FileToList(fileName string) ([]int, []int) {
     file, err := os.Open(fileName)
 
