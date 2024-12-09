@@ -53,7 +53,7 @@ func star2() {
     rules := getRules()
     updates := getUpdates()
     sum := 0
-
+    swaps := 0
     for _, update := range updates {
         // check if valid
         swap := false
@@ -66,6 +66,7 @@ func star2() {
                 update[i], update[i-1] = update[i-1], update[i]
                 i = 0
                 activeRuleValues = []int{}
+                swaps++
             } else {
                 activeRuleValues = append(activeRuleValues, update[i])
                 i++
@@ -78,6 +79,7 @@ func star2() {
     }
 
     fmt.Println("sum of corrected updates: ", sum)
+    fmt.Println("sum of swaps", swaps)
 }
 
 func getRules() map[int][]int {

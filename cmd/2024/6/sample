@@ -1,0 +1,199 @@
+/*
+package main
+
+import (
+    "bufio"
+    "fmt"
+    "log"
+    "os"
+)
+
+func main() {
+    file, err := os.Open("cmd/2024/6/input.txt")
+    if err != nil {
+        log.Fatal(err)
+    }
+
+    reader := bufio.NewReader(file)
+    board := Board{}
+    board.construct(reader)
+
+    fmt.Println(board.guard)
+    fmt.Println(board.outOfBounds())
+    fmt.Println(board.w, board.h)
+
+    board.play()
+
+    fmt.Println("Visited: ", len(board.visited))
+    fmt.Println("Possible Loops: ", len(board.possibleLoops))
+}
+
+func (b* Board) play() {
+    // evaluate for possible loops
+    for {
+        // check for out of bounds
+        if b.outOfBounds() {
+            if b.ghosting {
+                b.exitGhosting() 
+            } else { break }
+        }
+
+        if b.ghosting { b.checkForLoop() }
+        b.markCurrent()
+        b.turnOrStep()
+        if !b.ghosting && !b.outOfBounds() { b.enterGhosting() }
+    }
+}
+
+func (b *Board) markCurrent() {
+    if b.ghosting {
+        b.ghostVisted[b.ghost.tile] = b.ghostVisted[b.ghost.tile] | b.ghost.direction
+    } else {
+        t := b.visited[b.guard.tile]
+        b.visited[b.guard.tile] = t | b.guard.direction
+    }
+}
+
+func (b *Board) turnOrStep() {
+    var active *Guard
+    if b.ghosting {
+        active = &b.ghost
+    } else {
+        active = &b.guard
+    }
+    inFront := active.nextTile()
+    if b.at(inFront) == '#' { active.rotate() } else { active.tile = inFront }
+}
+
+func (g *Guard) nextTile() Tile {
+    return Tile{
+        g.tile.x + (g.direction & right) >> 2 - (g.direction & left),
+        g.tile.y + (g.direction & down) >> 1 - (g.direction & up) >> 3,
+    }
+}
+
+func (b *Board) checkForLoop() {
+    l := b.visited[b.ghost.tile] & b.ghost.direction
+    r := b.ghostVisted[b.ghost.tile] & b.ghost.direction
+    _, ok := b.visited[b.testObst]
+    if (l > 0 || r > 0){
+        if !ok { b.possibleLoops[b.testObst] = true }
+        b.exitGhosting()
+    }
+}
+
+func (b *Board) exitGhosting() {
+    b.ghosting = false
+    b.ghostVisted = make(map[Tile]int)
+}
+
+func (b *Board) enterGhosting() { 
+    b.ghosting = true
+    b.ghost = b.guard
+    b.testObst = b.ghost.nextTile()
+    b.ghost.rotate()
+}
+
+func (b *Board) outOfBounds() bool {
+    g := b.guard
+    if b.ghosting { g = b.ghost }
+
+    return g.tile.x < 0 || g.tile.x >= b.w || g.tile.y < 0 || g.tile.y >= b.h
+}
+
+// turn right and move until we loop or are out of bounds
+// return to guard
+// mark spot
+// rotate or step
+
+// utils we need
+// step or rotate based on next
+// switch between real and ghost guard
+// check if we've visited current tile in direction
+// check if out of bounds
+
+type Tile struct {
+    x, y int
+}
+
+type Board struct {
+    tiles []int
+    w, h int
+    guard Guard
+
+    visited map[Tile]int
+
+    ghostVisted map[Tile]int
+    ghost Guard
+    ghosting bool
+    testObst Tile 
+    possibleLoops map[Tile]bool
+
+    startingPos Tile
+}
+
+type Guard struct {
+    tile Tile
+    direction int
+}
+
+func (b *Board) construct(reader *bufio.Reader) {
+    w, h := 0, 0
+    directionTile := '^'
+    for {
+        r, _, err := reader.ReadRune()
+        if err != nil { break }
+        switch r {
+        case rune(obst), rune(openTile):
+            w++
+            b.tiles = append(b.tiles, int(r))
+        case '\n':
+            h++
+            b.w = w
+            w = 0
+        case '<', '>', 'v', '^':
+            b.tiles = append(b.tiles, '.')
+            directionTile = r
+            b.guard.tile.x = w
+            w++
+            b.guard.tile.y = h
+        }
+    }
+    b.h = h
+    switch directionTile {
+    case '^':
+        b.guard.direction = up
+    case '>':
+        b.guard.direction = right
+    case 'v':
+        b.guard.direction = down
+    case '<':
+        b.guard.direction = left
+    }
+    b.startingPos = b.guard.tile
+    b.visited = make(map[Tile]int)
+    b.ghostVisted = make(map[Tile]int)
+    b.possibleLoops = make(map[Tile]bool)
+}
+
+func (b *Board) at(t Tile) int {
+    if t.x < 0 || t.x >= b.w || t.y < 0 || t.y >= b.h { return -1 }
+    return b.tiles[t.y * b.w + t.x]
+}
+
+func (g *Guard) rotate() {
+    if g.direction == left {
+        g.direction = up
+    } else {
+        g.direction = g.direction >> 1
+    }
+}
+
+const obst = int('#')
+const openTile = int('.')
+
+const up = 0b1000
+const right = 0b0100
+const down = 0b0010
+const left = 0b0001
+*/
